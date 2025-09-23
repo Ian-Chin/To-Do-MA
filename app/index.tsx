@@ -1,23 +1,30 @@
+import { useRouter } from "expo-router";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-  const handleLogin = () => Alert.alert("Navigate", "Go to Login screen");
-  const handleSignup = () => Alert.alert("Navigate", "Go to Signup screen");
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>WELCOME</Text>
-      <Text style={styles.title}>To-Do</Text>
       <Text style={styles.subtitle}>Organize your tasks simply.</Text>
 
       <View style={styles.buttonsRow}>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/Login")}
+        >
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, styles.outlineButton]} onPress={handleSignup}>
-          <Text style={[styles.buttonText, styles.outlineButtonText]}>Sign Up</Text>
+        <TouchableOpacity
+          style={[styles.button, styles.outlineButton]}
+          onPress={() => router.push("/SignUp")}
+        >
+          <Text style={[styles.buttonText, styles.outlineButtonText]}>
+            Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -29,42 +36,36 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
-    backgroundColor: "#fff9e4ff",
   },
   title: {
-    fontSize: 50,
+    fontSize: 40,
     fontWeight: "700",
-    marginBottom: 8,
-    color: "#753704ff",
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
     color: "#666",
-    marginBottom: 24,
+    marginBottom: 20,
   },
   buttonsRow: {
-    width: "100%",
-    paddingHorizontal: 24,
+    width: "80%",
   },
   button: {
-    backgroundColor: "#753704ff",
+    backgroundColor: "#753704",
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
     marginBottom: 12,
   },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 16,
+  buttonText: { 
+    color: "#fff", 
+    fontSize: 16, 
+    fontWeight: "600" 
   },
   outlineButton: {
-    backgroundColor: "#ffffffff",
+    backgroundColor: "transparent",
     borderWidth: 1,
-    borderColor: "#753704ff",
+    borderColor: "#753704",
   },
-  outlineButtonText: {
-    color: "#753704ff",
-  },
+  outlineButtonText: { color: "#753704" },
 });

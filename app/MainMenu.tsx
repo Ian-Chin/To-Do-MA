@@ -1,11 +1,16 @@
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 
 type MainMenuProps = {
   navigation: any;
 };
 
-export default function MainMenu({ navigation }: MainMenuProps) {
+export default function MainMenu() {
+const navigation = useNavigation<StackNavigationProp<any>>();
+    
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Main Menu</Text>
@@ -13,21 +18,21 @@ export default function MainMenu({ navigation }: MainMenuProps) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Tasks")}
+        onPress={() => navigation.navigate("ViewTask")}
       >
         <Text style={styles.buttonText}> View Tasks</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("AddTask")}
+        onPress={() => navigation.navigate("Calender")}
       >
         <Text style={styles.buttonText}> Calender</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Settings")}
+        onPress={() => navigation.navigate("Setting")}
       >
         <Text style={styles.buttonText}>⚙ Settings</Text>
       </TouchableOpacity>

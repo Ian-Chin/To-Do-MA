@@ -47,7 +47,7 @@ export default function Login() {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/MainMenu")}>
         <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
 

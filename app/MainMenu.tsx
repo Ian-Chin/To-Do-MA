@@ -1,7 +1,5 @@
-import "bootstrap-icons/font/bootstrap-icons.css";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
 
 type MainMenuProps = {
   navigation: any;
@@ -24,7 +22,7 @@ export default function MainMenu({ navigation }: MainMenuProps) {
         style={styles.button}
         onPress={() => navigation.navigate("AddTask")}
       >
-        <Text style={styles.buttonText}>+ Add Task</Text>
+        <Text style={styles.buttonText}> Calender</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

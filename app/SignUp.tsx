@@ -1,40 +1,50 @@
-// screens/SignupScreen.tsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import type { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-};
-
-type SignupScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "Signup"
->;
-
-export default function SignupScreen() {
-  const navigation = useNavigation<SignupScreenNavigationProp>();
-  const [name, setName] = useState("");
+export default function Signup() {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignup = () => {
-    if (!name || !email || !password) {
-      Alert.alert("Error", "All fields are required");
-      return;
+  const validate = () => {
+    if (!username.trim()) {
+      Alert.alert("Validation Error", "Username is required");
+      return false;
     }
-    // Placeholder signup logic
-    Alert.alert("Success", `Account created for ${name}`);
-    navigation.navigate("Login"); // Redirect back to login after signup
+    if (!email.includes("@") || !email.includes(".")) {
+      Alert.alert("Validation Error", "Enter a valid email address");
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert("Validation Error", "Password must be at least 6 characters");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert("Validation Error", "Passwords do not match");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSignup = async () => {
+    if (validate()) {
+      const user = { username, email, password };
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+      Alert.alert("Success", "Account created locally!");
+      navigation.navigate("Login");
+    }
   };
 
   return (
@@ -43,9 +53,9 @@ export default function SignupScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
 
       <TextInput
@@ -54,22 +64,27 @@ export default function SignupScreen() {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        autoCapitalize="none"
       />
 
       <TextInput
         style={styles.input}
         placeholder="Password"
+        secureTextEntry
         value={password}
         onChangeText={setPassword}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
         secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Create Account</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.link}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -79,38 +94,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 20,
+    padding: 24,
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 32,
+    fontWeight: "700",
+    marginBottom: 24,
     textAlign: "center",
+    color: "#753704ff",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 12,
     borderRadius: 8,
-    marginBottom: 15,
+    padding: 12,
+    marginBottom: 16,
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#753704",
-    padding: 15,
+    backgroundColor: "#753704ff",
+    paddingVertical: 14,
     borderRadius: 8,
-    marginBottom: 10,
+    alignItems: "center",
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: "600",
     fontSize: 16,
   },
-  link: { 
-    color: "#753704", 
-    textAlign: "center", 
-    marginTop: 10 
-},
 });

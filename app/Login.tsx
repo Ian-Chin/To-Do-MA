@@ -1,27 +1,36 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function Login() {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password");
-      return;
+  const handleLogin = async () => {
+    const storedUser = await AsyncStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (email === user.email && password === user.password) {
+        Alert.alert("Login Success", "Welcome back " + user.username);
+        navigation.navigate("MainMenu");
+      } else {
+        Alert.alert("Error", "Invalid email or password");
+      }
+    } else {
+      Alert.alert("Error", "No account found, please sign up");
     }
-    // 🔑 Later: Add real authentication logic here
-    Alert.alert("Success", `Logged in as ${email}`);
-    router.push("/"); // Navigate back to home after login
   };
 
   return (
@@ -47,7 +56,10 @@ export default function Login() {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/MainMenu")}>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => router.push("/MainMenu")}
+      >
         <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
 
